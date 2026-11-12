@@ -1,0 +1,25 @@
+databases:
+  - name: manhwaforge-db
+    plan: basic-256mb
+    databaseName: manhwa
+    user: manhwa
+
+services:
+  - type: web
+    name: manhwaforge-ai
+    runtime: docker
+    plan: starter
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: manhwaforge-db
+          property: connectionString
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_TEXT_MODEL
+        value: gpt-4.1
+      - key: ENVIRONMENT
+        value: production
+      - key: UPLOAD_DIR
+        value: /app/storage/uploads
